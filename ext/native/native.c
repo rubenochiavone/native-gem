@@ -19,7 +19,7 @@ void Init_native()
 
 VALUE method_native_log(VALUE self)
 {
-    printf("Native log [HELENA]\n");
+    printf("Native log\n");
     return Qnil;
 }
 
