@@ -2,6 +2,10 @@
 # https://hub.docker.com/r/library/ruby/tags/
 image: "ruby:2.5"
 
+stages:
+  - build
+  - test
+
 # Cache gems in between builds
 cache:
   paths:
@@ -16,3 +20,13 @@ build:
   stage: build
   script:
     - bundle exec rake compile
+  artifacts:
+    paths:
+      - lib/native.so
+
+test:
+  stage: test
+  script:
+    - bundle exec rake test
+  dependencies:
+    - build

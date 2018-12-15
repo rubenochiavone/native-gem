@@ -28,7 +28,7 @@ VALUE method_native_array(VALUE self)
     int n = 10;
     VALUE native_array = rb_ary_new2(n);
     for (int i = 0; i < n; i++) {
-        rb_ary_store(native_array, i, rb_sprintf("native str %d", i));
+        rb_ary_store(native_array, i, rb_sprintf("Native str %d", i));
     }
     return native_array;
 }
