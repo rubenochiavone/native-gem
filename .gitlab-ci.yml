@@ -2,31 +2,20 @@
 # https://hub.docker.com/r/library/ruby/tags/
 image: "ruby:2.5"
 
-stages:
-  - build
-  - test
-
 # Cache gems in between builds
 cache:
   paths:
     - vendor/bundle
 
 before_script:
-  - ruby -v                                          # Print out ruby version for debugging
-  - gem install bundler --no-ri --no-rdoc            # Bundler is not installed with the image
-  - bundle install -j $(nproc) --path vendor/bundle  # Install dependencies into ./vendor/bundle
+  - ruby -v                                         # Print out ruby version for debugging
+  - gem install bundler --no-ri --no-rdoc           # Bundler is not installed with the image
+  - bundle install -j $(nproc) --path vendor/bundle # Install dependencies into ./vendor/bundle
 
-build:
-  stage: build
+build-test:
+  coverage: '/Lines executed:\d+\.\d+/'
   script:
-    - bundle exec rake compile
-  artifacts:
-    paths:
-      - lib/native.so
-
-test:
-  stage: test
-  script:
+    - USE_GCOV=true bundle exec rake compile
     - bundle exec rake test
-  dependencies:
-    - build
+    - cd $(dirname $(find -iname *.gcda))
+    - gcov -r -m -o ./ $CI_PROJECT_DIR/ext/native/native.c
