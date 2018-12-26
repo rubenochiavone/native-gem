@@ -10,7 +10,7 @@ class TestNativeArray < Minitest::Test
   end
 
   def test_that_native_array_elements_are_string
-    Native::array().each do |elem, index|
+    Native::array().each do |elem|
       assert elem.is_a? String
     end
   end
